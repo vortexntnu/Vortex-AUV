@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(autopilot)
+project(los_controller)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -9,7 +9,9 @@ project(autopilot)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   rospy
-  #dynamic_reconfigure
+  geometry_msgs
+  vortex_msgs
+  dynamic_reconfigure
 )
 
 ## System dependencies are found with CMake's conventions
@@ -19,7 +21,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
 ## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
-catkin_python_setup()
+#catkin_python_setup()
 
 ################################################
 ## Declare ROS messages, services and actions ##
@@ -87,9 +89,9 @@ catkin_python_setup()
 ##     and list every .cfg file to be processed
 
 ## Generate dynamic reconfigure parameters in the 'cfg' folder
-#generate_dynamic_reconfigure_options(
-#   cfg/Autopilot.cfg
-#)
+generate_dynamic_reconfigure_options(
+   cfg/LOSController.cfg
+)
 
 ###################################
 ## catkin specific configuration ##
@@ -102,7 +104,7 @@ catkin_python_setup()
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES autopilot
+#  LIBRARIES los_controller
 #  CATKIN_DEPENDS rospy
 #  DEPENDS system_lib
 )
@@ -118,11 +120,11 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-catkin_install_python(PROGRAMS src/autopilot.py
-                               #scripts/PositionControl.py
-                               #scripts/VelocityControl.py
-                      DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
-
-install(DIRECTORY launch config cfg
-        DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-        PATTERN "*~" EXCLUDE)
+#catkin_install_python(PROGRAMS src/los_controller_node.py
+#                               #scripts/PositionControl.py
+#                               #scripts/VelocityControl.py
+#                      DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+#
+#install(DIRECTORY launch config cfg
+#        DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+#        PATTERN "*~" EXCLUDE)

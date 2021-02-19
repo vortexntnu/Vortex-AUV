@@ -15,9 +15,9 @@ Allocator::Allocator(ros::NodeHandle nh)
   m_min_thrust(-std::numeric_limits<double>::infinity()),
   m_max_thrust(std::numeric_limits<double>::infinity())
 {
-  m_sub = m_nh.subscribe("/manta/thruster_manager/input", 1, &Allocator::callback, this);
+  m_sub = m_nh.subscribe("/auv/thruster_manager/input", 1, &Allocator::callback, this);
   m_pub = m_nh.advertise<vortex_msgs::ThrusterForces>("thruster_forces", 1);
-  //m_pub = m_nh.advertise<vortex_msgs::ThrusterForces>("manta/thruster_manager/input", 1);
+  //m_pub = m_nh.advertise<vortex_msgs::ThrusterForces>("/auv/thruster_manager/input", 1);
 
   if (!m_nh.getParam("/propulsion/dofs/num", m_num_degrees_of_freedom))
     ROS_FATAL("Failed to read parameter number of dofs.");
@@ -33,7 +33,7 @@ Allocator::Allocator(ros::NodeHandle nh)
 
   // Read thrust limits
   std::vector<double> thrust;
-  if (!m_nh.getParam("/thrusters/characteristics/thrust", thrust))
+  if (!m_nh.getParam("/propulsion/thrusters/characteristics/thrust", thrust))
   {
     ROS_WARN("Failed to read params min/max thrust. Using (%.2f) to (%.2f).",
       m_min_thrust, m_max_thrust);
