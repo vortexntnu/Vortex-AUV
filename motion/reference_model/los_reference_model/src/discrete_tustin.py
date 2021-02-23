@@ -6,6 +6,7 @@
 import rospy
 import numpy as np
 import time
+
 class ReferenceModel:
 
 	def __init__(self, x, h):
