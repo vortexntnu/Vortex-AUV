@@ -8,6 +8,7 @@ import actionlib
 
 from move_base_msgs.msg import MoveBaseAction
 from actionlib_msgs.msg import GoalStatus
+from geometry_msgs.msg import Point, Pose
 
 class DPGuidance:
     """
@@ -41,29 +42,29 @@ class DPGuidance:
 
         self.timeout = rospy.get_param('~guidance_dp_timeout', 90)
 
-
         self.action_server = actionlib.SimpleActionServer(name='dp_action_server', ActionSpec=MoveBaseAction, auto_start=False)
         self.action_server.register_goal_callback(self.goalCB)  # Called whenever guidance_interface sends a new goal for the dp system
         self.action_server.register_preempt_callback(self.preemptCB)
         self.action_server.start()
 
-        # Connect to the dp controller action server. This is how the guidance and controller systems will communicate
-        self.dp_controller_client = actionlib.SimpleActionClient('/controller/move_base', MoveBaseAction)
+        self.should_publish_setpoint = False
+        self.setpoint_pub = rospy.Publisher('/reference_model/input', Pose, queue_size=1)
 
+        self.goal_pose = Pose()
+
+    def publish_setpoint(self):
+        if self.should_publish_setpoint:
+            self.setpoint_pub.publish(self.goal_pose)
 
     def goalCB(self):
         """
-        Accept a goal from the guidance interface and pass it right on :)
+        Accept a goal from the guidance interface and update internal state
         """
-        
-        controller_goal = self.action_server.accept_new_goal()
 
-        self.dp_controller_client.send_goal(controller_goal, done_cb=self.done_cb, feedback_cb=None)
+        goal = self.action_server.accept_new_goal()
+        self.goal_pose = goal.target_pose.pose
+        self.should_publish_setpoint = True
 
-        if not self.dp_controller_client.wait_for_result(timeout=rospy.Duration(self.timeout)):
-            self.action_server.set_aborted()
-            rospy.loginfo('DP controller aborted action due to timeout')
-        
 
     def preemptCB(self):
         """
@@ -74,27 +75,14 @@ class DPGuidance:
             rospy.loginfo("Preempted requested by dp guidance client!")
             self.action_server.set_preempted()
 
-    
-    def done_cb(self, state, result):
-        """
-        Set the outcome of the action depending on
-        the returning result.
-        """
-
-        if state == GoalStatus.SUCCEEDED:
-            self.action_server.set_succeeded()
-
-        elif state == GoalStatus.PREEMPTED:
-            self.action_server.set_preempted()
-
-        else:
-            self.action_server.set_aborted()
-
 if __name__ == '__main__':
 
     try:
         dp_guidance = DPGuidance()
-        rospy.spin()
+        
+        while not rospy.is_shutdown():
+            dp_guidance.publish_setpoint()
+
 
     except rospy.ROSInternalException as e:
         rospy.logerr(e)
