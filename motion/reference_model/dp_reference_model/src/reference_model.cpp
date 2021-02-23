@@ -1,18 +1,39 @@
-/*   Written by Jae Hyeong Hwang
-     Copyright (c) 2021 Manta AUV, Vortex NTNU.
+/*   Written by Jae Hyeong Hwang and Christopher Strøm
+     Copyright (c) 2021 Vortex NTNU.
      All rights reserved. */
 
-#include "dp_controller/quaternion_pd_controller.h"
-#include "dp_controller/reference_model.h"
 
+#include "dp_reference_model/reference_model.h"
 
-ReferenceModel::ReferenceModel() {
+ReferenceModel::ReferenceModel(ros::NodeHandle nh)
+{
      Eigen::Vector3d x_d_prev          = Eigen::Vector3d::Zero();
      Eigen::Vector3d x_d_prev_prev     = Eigen::Vector3d::Zero();
      Eigen::Vector3d x_ref_prev        = Eigen::Vector3d::Zero();
      Eigen::Vector3d x_ref_prev_prev   = Eigen::Vector3d::Zero();
+
+     setpoint_sub  = nh.subscribe("/reference_model/input", 10, &ReferenceModel::setpoint_cb, this);
+     reference_pub = nh.advertise<geometry_msgs::Pose>("/reference_model/output", 10, this);
 }
 
+
+// Callbacks
+void ReferenceModel::setpoint_cb(const geometry_msgs::Pose &msg) 
+{
+     Eigen::Vector3d x_ref{msg.position.x, msg.position.y, msg.position.z};
+     Eigen::Vector3d x_d = calculate_smooth(x_ref);
+
+     geometry_msgs::Point x_d_point;
+     tf::pointEigenToMsg(x_d, x_d_point);
+
+     geometry_msgs::Pose pose;
+     pose.position = x_d_point;
+     pose.orientation = msg.orientation;
+     reference_pub.publish(pose);
+}
+
+
+// Utility
 Eigen::Vector3d ReferenceModel::calculate_smooth(const Eigen::Vector3d &x_ref)
 {
      Eigen::Vector3d x_d;
@@ -24,10 +45,12 @@ Eigen::Vector3d ReferenceModel::calculate_smooth(const Eigen::Vector3d &x_ref)
      x_ref_prev = x_ref;
      x_d_prev_prev = x_d_prev;
      x_d_prev = x_d;
+
      return x_d;
 }
 
-void ReferenceModel::reset(Eigen::Vector3d pos) {
+void ReferenceModel::reset(Eigen::Vector3d pos)
+{
      x_d_prev = pos;
      x_d_prev_prev = pos;
      x_ref_prev = pos;

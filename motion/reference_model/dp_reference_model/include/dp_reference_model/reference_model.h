@@ -1,15 +1,29 @@
 /*   Written by Jae Hyeong Hwang
      Copyright (c) 2021 Manta AUV, Vortex NTNU.
      All rights reserved. */
-#ifndef VORTEX_CONTROLLER_REFERENCE_MODEL_H
-#define VORTEX_CONTROLLER_REFERENCE_MODEL_H
+#ifndef DP_REFERENCE_MODEL_H
+#define DP_REFERENCE_MODEL_H
+
 #include <Eigen/Dense>
 #include <math.h>
+
+#include "ros/ros.h"
+#include "geometry_msgs/Point.h"
+#include "geometry_msgs/Pose.h"
+#include "eigen_conversions/eigen_msg.h"
+#include "tf/tf.h"
+#include "tf_conversions/tf_eigen.h"
 using namespace Eigen;
 
-struct ReferenceModel {   
+class ReferenceModel {   
+public:
+     ReferenceModel(ros::NodeHandle nh);
 
-     ReferenceModel();
+     ros::Subscriber setpoint_sub;
+     ros::Publisher reference_pub;
+
+private:
+     void setpoint_cb(const geometry_msgs::Pose&msg);
 
      Eigen::Vector3d calculate_smooth(const Eigen::Vector3d &x_ref);
      void reset(Eigen::Vector3d pos);
@@ -22,4 +36,4 @@ struct ReferenceModel {
      EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
-#endif  // VORTEX_CONTROLLER_REFERENCE_MODEL_H
+#endif  // DP_REFERENCE_MODEL_H
