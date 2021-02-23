@@ -9,19 +9,19 @@
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>los_controller</build_depend>
   <build_depend>nav_msgs</build_depend>
-  <build_depend>reference_model</build_depend>
+  <build_depend>temp_reference_model</build_depend>
   <build_depend>std_msgs</build_depend>
   <build_depend>tf</build_depend>
   <build_depend>vortex_msgs</build_depend>
   <build_export_depend>los_controller</build_export_depend>
   <build_export_depend>nav_msgs</build_export_depend>
-  <build_export_depend>reference_model</build_export_depend>
+  <build_export_depend>temp_reference_model</build_export_depend>
   <build_export_depend>std_msgs</build_export_depend>
   <build_export_depend>tf</build_export_depend>
   <build_export_depend>vortex_msgs</build_export_depend>
   <exec_depend>los_controller</exec_depend>
   <exec_depend>nav_msgs</exec_depend>
-  <exec_depend>reference_model</exec_depend>
+  <exec_depend>temp_reference_model</exec_depend>
   <exec_depend>std_msgs</exec_depend>
   <exec_depend>tf</exec_depend>
   <exec_depend>vortex_msgs</exec_depend>

@@ -21,7 +21,7 @@ import actionlib
 from vortex_msgs.msg import LosPathFollowingAction, LosPathFollowingGoal, LosPathFollowingResult, LosPathFollowingFeedback
 
 # modules included in this package
-from reference_model.discrete_tustin import ReferenceModel
+from temp_reference_model.discrete_tustin import ReferenceModel
 
 class LOS:
 	"""

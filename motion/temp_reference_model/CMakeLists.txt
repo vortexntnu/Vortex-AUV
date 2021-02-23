@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(inspect_point)
+project(temp_reference_model)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -8,12 +8,8 @@ project(inspect_point)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  los_controller
-  nav_msgs
-  temp_reference_model
-  std_msgs
-  tf
-  vortex_msgs
+  geometry_msgs
+  rospy
 )
 
 ## System dependencies are found with CMake's conventions
@@ -23,7 +19,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
 ## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
-# catkin_python_setup()
+catkin_python_setup()
 
 ################################################
 ## Declare ROS messages, services and actions ##
@@ -73,7 +69,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate added messages and services with any dependencies listed here
 # generate_messages(
 #   DEPENDENCIES
-#   nav_msgs#   std_msgs#   vortex_msgs
+#   geometry_msgs
 # )
 
 ################################################
@@ -107,8 +103,8 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES inspect_point
-#  CATKIN_DEPENDS los_controller nav_msgs reference_model std_msgs tf vortex_msgs
+#  LIBRARIES reference_model
+#  CATKIN_DEPENDS geometry_msgs rospy
 #  DEPENDS system_lib
 )
 
@@ -125,7 +121,7 @@ include_directories(
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/inspect_point.cpp
+#   src/${PROJECT_NAME}/reference_model.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -136,7 +132,7 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/inspect_point_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/reference_model_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -200,7 +196,7 @@ include_directories(
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_inspect_point.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_reference_model.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
