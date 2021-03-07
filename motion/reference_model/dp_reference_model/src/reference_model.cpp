@@ -5,7 +5,7 @@
 
 #include "dp_reference_model/reference_model.h"
 
-ReferenceModel::ReferenceModel(ros::NodeHandle nh)
+ReferenceModel::ReferenceModel(ros::NodeHandle nh) : joystick_input{false}
 {
      Eigen::Vector3d x_d_prev          = Eigen::Vector3d::Zero();
      Eigen::Vector3d x_d_prev_prev     = Eigen::Vector3d::Zero();

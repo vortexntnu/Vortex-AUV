@@ -31,10 +31,20 @@ using namespace Eigen;
 
 class ReferenceModel {   
 private:
+     /* Bool to choose between input from the joystick and the FSM. Can only be set via joystick */
+     bool joystick_input;
+
+     /* Positions */
      Eigen::Vector3d x_d_prev;         /** Previous desired body position            */
      Eigen::Vector3d x_d_prev_prev;    /** Previous previous desired body position   */
      Eigen::Vector3d x_ref_prev;       /** Previous reference body position          */
      Eigen::Vector3d x_ref_prev_prev;  /** Previous previous reference body position */
+
+     /**
+      * @brief Callback to change the variable @p joystick_input whenever it is activated
+      * on the joystick
+      */
+     void input_type_cb(const geometry_msgs::Pose& msg);
 
      /**
       * @brief Callback-function calculating desired position and orientation 
@@ -62,6 +72,11 @@ private:
      EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
 public:
+     /**
+      * @brief Constructor
+      * 
+      * @param nh ROS nodehandle
+      */
      ReferenceModel(ros::NodeHandle nh);
 
      ros::Subscriber setpoint_sub;
