@@ -34,6 +34,10 @@ private:
      /* Bool to choose between input from the joystick and the FSM. Can only be set via joystick */
      bool ROV_state;
 
+     /* Eigen-vectors used during calculate_smooth */
+     Eigen::Vector3d a_x; 
+     Eigen::Vector3d b_x;
+
      /* Positions */
      Eigen::Vector3d x_d_prev;         /** Previous desired body position            */
      Eigen::Vector3d x_d_prev_prev;    /** Previous previous desired body position   */
