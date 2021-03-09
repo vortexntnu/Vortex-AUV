@@ -10,8 +10,6 @@
  * Module connecting the DP-controller to the joystick_guidance and 
  * the dp_guidance
  */
-
-/*    */
 #ifndef DP_REFERENCE_MODEL_H
 #define DP_REFERENCE_MODEL_H
 
@@ -30,7 +28,8 @@
 
 using namespace Eigen;
 
-class ReferenceModel {   
+class ReferenceModel 
+{   
 private:
      /* Bool to choose between input from the joystick and the FSM. Can only be set via joystick */
      bool ROV_state;

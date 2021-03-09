@@ -23,6 +23,7 @@ ReferenceModel::ReferenceModel(ros::NodeHandle nh) : ROV_state{false}
 // Callbacks
 void ReferenceModel::joystick_setpoint_cb(const geometry_msgs::Pose &msg) 
 {
+     /* Only accepting if driving as a ROV */
      if(ROV_state){
           calculate_desired_pose(msg);
      }
@@ -30,6 +31,7 @@ void ReferenceModel::joystick_setpoint_cb(const geometry_msgs::Pose &msg)
 
 void ReferenceModel::fsm_setpoint_cb(const geometry_msgs::Pose &msg) 
 {
+     /* Only accepting if driving as an AUV */
      if(!ROV_state){
           calculate_desired_pose(msg);
      }
@@ -37,7 +39,7 @@ void ReferenceModel::fsm_setpoint_cb(const geometry_msgs::Pose &msg)
 
 void ReferenceModel::uuv_state_cb(const std_msgs::Bool &msg)
 {
-     /* Must pherhaps cast this first */
+     /* Changing the state between ROV <--> AUV */
      ROV_state = msg.data;
 }
 
