@@ -9,6 +9,7 @@
   <!-- PARAMETERS -->
   <rosparam command="load" file="$(find auv_setup)/config/robots/gladlaks.yaml"/>
   <rosparam command="load" file="$(find auv_setup)/config/environments/trondheim_freshwater.yaml"/>
+  <rosparam command="load" file="$(find motion)/reference_model/dp_reference_model/config/reference_model.yaml"/>
 
 
   <!-- INCLUDES -->
